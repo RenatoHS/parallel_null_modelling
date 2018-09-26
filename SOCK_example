@@ -1,0 +1,65 @@
+# Parallel null model using a SOCK cluster archictecture
+# Example used: functional diversity
+# For this example we will compute functional richness (FRic) and functional divergence (FDiv)
+# FRic measures the volume of the convex hull in the functional space occupied by a set of species from a given community
+# FDiv measures measures how species are distributed within the volume filled by the assemblage (Mouillot
+# et al. 2013a). FDiv measures the relative position of species from the gravity centre of the most extreme species (i.e. those
+# at the edge of the convex hull). FDiv is close to 1 if most species are close to the border of the convex hull and is close to
+# 0 if most species are close to the gravity centre of the volume filled by the assemblage.
+
+# Reference: Villéger, S., N. W. H. Mason and D. Mouillot (2008) New multidimensional functional diversity
+# indices for a multifaceted framework in functional ecology. Ecology 89:2290-2301.
+
+# Data: (1) Community data: Fish communities from France's reservoirs [83 communities and 45 species)
+#       (2) Trait data: morphological and ecological traits (25 traits)
+
+require(FD)
+require(doSNOW)
+require(picante)
+require(ade4)
+
+# load data
+comm<-load(X)
+traits<-load(X)
+
+#
+
+# compute observed values for functional diversity metrics (FRic and FDiv)
+FD_results<-dbFD(traits, comm,  w.abun = FALSE, calc.FRic = TRUE, calc.FDiv = TRUE)
+
+# FD compute a bunch of different metrics, but we only are interested in FRic and FDiv)
+FD_obs <- as.data.frame(cbind(FRic = FD_results$FRic, FDiv = FD_results$FDiv)) 
+
+# Now the null model
+
+# define number of cores
+nc <- 4 
+    
+# create cluster
+cl <- snow::makeCluster(nc, type = "SOCK")
+    
+# register parallel backend 
+doSNOW::registerDoSNOW(cl)
+ 
+# export necessary variables and functions to the cluster of cores
+snow::clusterExport(cl=cl, c("nperm", "comm", "traits","dbFD_modif"),envir=environment()) 
+ 
+# define number of permutations for the null model
+nperm <- 1000
+
+FD_null_results <- foreach(n = 1:nc, .combine=c, .packages=c("picante","FD")) %dopar% {
+
+# "nt" is the number of tasks per core (i.e., the number of permutations per core)
+nt=nperm/nc
+
+# create a list with "nt" replicates of the "comm" matrix
+rep.comm <- replicate(nt,comm)
+
+# randomize each replicate; for this example we will use the "richness" null model (i.e., null communities will have the same 
+# richness as the observed communities)
+rand.comm <-lapply(rep.comm, function(x) picante::randomizeMatrix(comm,null.model="richness",iterations=1000))
+colnames(null.multi.temp) <-c ("funct.beta.SIM","funct.beta.SNE","funct.beta.SOR")
+
+
+
+}
