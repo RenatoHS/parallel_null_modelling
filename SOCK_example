@@ -47,19 +47,78 @@ snow::clusterExport(cl=cl, c("nperm", "comm", "traits","dbFD_modif"),envir=envir
 # define number of permutations for the null model
 nperm <- 1000
 
-FD_null_results <- foreach(n = 1:nc, .combine=c, .packages=c("picante","FD")) %dopar% {
+# The ".combine" argument in the foreach loop specifiy how the user wants to combine the output of all cores together
+# Because the final output of our function is a list object, we use the argument ".combine=c"
+# to concatanate the list objects from each core into the "null_model_FD" object 
+null_model_FD <- foreach(n=1:nc, .combine=c, .packages=c("picante","FD")) %dopar% {
 
 # "nt" is the number of tasks per core (i.e., the number of permutations per core)
 nt=nperm/nc
 
-# create a list with "nt" replicates of the "comm" matrix
-rep.comm <- replicate(nt,comm)
+# replicate "nt" times the temporary result matrix where null "FRic" and "FDiv" results will be stored into a list object
+  null_model_FD_temp <- replicate(nt,matrix(0, ncol=2, nrow=nrow(comm),dimnames = list(NULL,c("FRic","FDiv"))),simplify=FALSE)
 
-# randomize each replicate; for this example we will use the "richness" null model (i.e., null communities will have the same 
-# richness as the observed communities)
-rand.comm <-lapply(rep.comm, function(x) picante::randomizeMatrix(comm,null.model="richness",iterations=1000))
-colnames(null.multi.temp) <-c ("funct.beta.SIM","funct.beta.SNE","funct.beta.SOR")
+# replicate "nt" times the commmunity matrix
+  rep.comm<-replicate(nt,comm,simplify=FALSE)
+# randomize the "nt" community matrices, keeping richness equal to observed
+  rand.comm<-lapply(rep.comm, function(x) randomizeMatrix(x,null.model="richness",iterations=1000))
+ for (j in 1:nt){
+        
+        # Compute FRic, FDIv for each randomized community matrix 
+		# Here we used a modified version of the dbFD function that allows for parallelization by identifying each core "core.ident=n"		
+          result_FD<-dbFD_modif(traits_pc,rand.comm[[j]],w.abun=F,calc.FRic = T, m=4,calc.FGR=F, calc.FDiv =T, core.ident=n)
+		# store results 
+          null_model_FD_temp[[j]]<-cbind(FRic = result_FD$FRic,FDiv=result_FD$FDiv)
+        # print(length(which(is.na(result_FD$FDiv))))
+      }
+	  # it is necessary to indicate the core output here (null_model_FD_temp)  
+	  # so the function will combine them at the end on the "null_model_FD" 
+      null_model_FD_temp
+    }
 
+	# close the cluster
+    stopCluster(cl)
+ 
+  # create matrices to store mean and sd values of the metrics (FRic, FDiv) for each lake (mean/sd of the null values)
+  FD_null_mean<-matrix(numeric(),ncol=2,nrow=nrow(comm))
+  FD_null_sd<-matrix(numeric(),ncol=2,nrow=nrow(comm))
+  colnames(FD_null_mean)<-c("FRic","FDiv")
+  colnames(FD_null_sd)<-c("FRic","FDiv")
+  
+  # create a matrix to store p-values for each metric (FRic, FDiv)
+  p<-matrix(numeric(),ncol=2,nrow=nrow(comm))
+ 
+  # for each lake "i"
+  for (i in 1:nrow(comm)){
+    
+    # extract the "nperm" values obtained from the null model
+    null_values<-do.call(rbind,lapply(null_model_FD, `[`,i,))
+    
+    
+    # compute mean and standard deviation of these null values
+    FD_null_mean[i,]<-colMeans(null_values)
+    FD_null_sd[i,]<-apply(null_values,2,sd)
+    
+    # compute p-values for each metric (i.e., the number of time the observed metric (FRic, FDiv) 
+    # is smaller than the null value divided by nperm
+    p[i,1]<-length(which(FD_obs[i,]<null_values[,1]))/nperm
+    p[i,2]<-length(which(FD_obs[i,]<null_values[,2]))/nperm 
+  }
 
-
-}
+  # compute standardizes effect sizes (SES) of both FRic and FDiv for each lake
+    FD_ses<-(FD_obs-FD_null_mean)/FD_null_sd
+  
+  # combine everything into a result matrix
+  res<-as.data.frame(matrix(numeric(),ncol=6,nrow=nrow(comm)))
+  colnames(res)<-c("FRic.obs","FRic.ses","FRic.p","FDiv.obs","FDiv.ses","FDiv.p")
+  res[,1]<-FD_obs[,1]
+  res[,2]<-FD_ses[,1]
+  res[,3]<-p[,1]
+  res[,4]<-FD_obs[,2]
+  res[,5]<-FD_ses[,2]
+  res[,6]<-p[,2]
+ 
+  
+  
+  
+  
