@@ -22,7 +22,8 @@ require(ade4)
 comm<-load(X)
 traits<-load(X)
 
-#
+# load dbFD_modif function. The original function was modified to allow for external paralelization. 
+source("dbFD_modif")
 
 # compute observed values for functional diversity metrics (FRic and FDiv)
 FD_results<-dbFD(traits, comm,  w.abun = FALSE, calc.FRic = TRUE, calc.FDiv = TRUE)
