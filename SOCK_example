@@ -36,7 +36,7 @@ traits_pc<-traits_pc$li
 
 
 # load dbFD_modif function. The original function was modified to allow for external paralelization. 
-source("dbFD_modif")
+source("https://raw.githubusercontent.com/RenatoHS/parallel_null_modelling/master/dbFD_modif")
 
 # compute observed values for functional diversity metrics (FRic and FDiv)
 FD_results<-dbFD(traits_pc, comm,  w.abun = FALSE, calc.FRic = TRUE, calc.FDiv = TRUE)
@@ -55,12 +55,12 @@ cl <- snow::makeCluster(nc, type = "SOCK")
 # register parallel backend 
 doSNOW::registerDoSNOW(cl)
  
+ # define number of permutations for the null model
+nperm <- 1000
+
 # export necessary variables and functions to the cluster of cores
 snow::clusterExport(cl=cl, c("nperm", "comm", "traits","dbFD_modif"),envir=environment()) 
  
-# define number of permutations for the null model
-nperm <- 1000
-
 # The ".combine" argument in the foreach loop specifiy how the user wants to combine the output of all cores together
 # Because the final output of our function is a list object, we use the argument ".combine=c"
 # to concatanate the list objects from each core into the final "null_model_FD" object 
