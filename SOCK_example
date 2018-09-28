@@ -115,8 +115,8 @@ nt=nperm/nc
     
     # compute p-values for each metric (i.e., the number of time the observed metric (FRic, FDiv) 
     # is smaller than the null value divided by nperm
-    p[i,1]<-length(which(FD_obs[i,]<null_values[,1]))/nperm
-    p[i,2]<-length(which(FD_obs[i,]<null_values[,2]))/nperm 
+    p[i,1]<-length(which(FD_obs[i,1]<null_values[,1]))/nperm
+    p[i,2]<-length(which(FD_obs[i,2]<null_values[,2]))/nperm 
   }
 
   # compute standardizes effect sizes (SES) of both FRic and FDiv for each lake
