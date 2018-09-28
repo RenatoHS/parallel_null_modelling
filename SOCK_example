@@ -22,11 +22,19 @@ require(ade4)
 comm<-load(X)
 traits<-load(X)
 
+# traits have qualitate and quantitative data, plus some missing values. Transform the data using the Gower distance method
+traits_gowdis<-FD::gowdis(traits)
+# compute principal coordinate analysis (PCoA) on the gower distance values; keep 4 first axes 
+traits_pc<-dudi.pco(traits_gowdis, scannf = FALSE, nf = 4)
+# get principal coordinate scores
+traits_pc<-traits_pc$li
+
+
 # load dbFD_modif function. The original function was modified to allow for external paralelization. 
 source("dbFD_modif")
 
 # compute observed values for functional diversity metrics (FRic and FDiv)
-FD_results<-dbFD(traits, comm,  w.abun = FALSE, calc.FRic = TRUE, calc.FDiv = TRUE)
+FD_results<-dbFD(traits_pc, comm,  w.abun = FALSE, calc.FRic = TRUE, calc.FDiv = TRUE)
 
 # FD compute a bunch of different metrics, but we only are interested in FRic and FDiv)
 FD_obs <- as.data.frame(cbind(FRic = FD_results$FRic, FDiv = FD_results$FDiv)) 
@@ -50,7 +58,7 @@ nperm <- 1000
 
 # The ".combine" argument in the foreach loop specifiy how the user wants to combine the output of all cores together
 # Because the final output of our function is a list object, we use the argument ".combine=c"
-# to concatanate the list objects from each core into the "null_model_FD" object 
+# to concatanate the list objects from each core into the final "null_model_FD" object 
 null_model_FD <- foreach(n=1:nc, .combine=c, .packages=c("picante","FD")) %dopar% {
 
 # "nt" is the number of tasks per core (i.e., the number of permutations per core)
