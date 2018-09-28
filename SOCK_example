@@ -19,7 +19,10 @@ require(picante)
 require(ade4)
 
 # load data
-comm<-load(X)
+urlfile_comm<-'https://raw.githubusercontent.com/RenatoHS/parallel_null_modelling/master/lake_comm.txt'
+comm<-read.table(urlfile,sep=";",row.names=1)
+
+
 traits<-load(X)
 
 # traits have qualitate and quantitative data, plus some missing values. Transform the data using the Gower distance method
