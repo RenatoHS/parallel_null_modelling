@@ -68,6 +68,8 @@ doSNOW::registerDoSNOW(cl)
  # define number of permutations for the null model
 nperm <- 1000
 
+#make sure that nperm/nc is a whole number so that all cores have the same number of permutations to work on
+
 # export necessary variables and functions to the cluster of cores
 snow::clusterExport(cl=cl, c("nperm", "comm", "traits","dbFD_modif"),envir=environment()) 
  
