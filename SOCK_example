@@ -20,8 +20,8 @@
 
 #########################################################################################################################################
 
-# Data: (1) Community data: Fish communities from France's reservoirs [83 communities and 45 species)
-#       (2) Trait data: morphological and ecological traits (25 traits)
+# Data: (1) Community data: Fish communities from France's reservoirs [83 communities x 45 species]
+#       (2) Trait data: morphological and ecological traits (45 species x 25 traits)
 
 require(FD)
 require(doSNOW)
