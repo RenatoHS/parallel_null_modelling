@@ -1,4 +1,6 @@
+#########################################################################################################################################
 # Parallel null model using a SOCK cluster archictecture
+#########################################################################################################################################
 # Example used: functional diversity
 # For this example we will compute functional richness (FRic) and functional divergence (FDiv)
 # FRic measures the volume of the convex hull in the functional space occupied by a set of species from a given community
@@ -6,9 +8,17 @@
 # et al. 2013a). FDiv measures the relative position of species from the gravity centre of the most extreme species (i.e. those
 # at the edge of the convex hull). FDiv is close to 1 if most species are close to the border of the convex hull and is close to
 # 0 if most species are close to the gravity centre of the volume filled by the assemblage.
+# Functional diversity metrics will be computed using a modified version of the dbFD function from the 'FD' package.
 
-# Reference: Villéger, S., N. W. H. Mason and D. Mouillot (2008) New multidimensional functional diversity
-# indices for a multifaceted framework in functional ecology. Ecology 89:2290-2301.
+# References: 
+# Villéger, S., N. W. H. Mason and D. Mouillot (2008) New multidimensional functional diversity
+# indices for a multifaceted framework in functional ecology. Ecology, 89:2290-2301.
+
+# Laliberté, E. and P. Legendre (2010) A distance-based framework for measuring functional diversity for multiple traits.
+# Ecology, 91:299-305.
+
+
+#########################################################################################################################################
 
 # Data: (1) Community data: Fish communities from France's reservoirs [83 communities and 45 species)
 #       (2) Trait data: morphological and ecological traits (25 traits)
