@@ -1,5 +1,5 @@
 #########################################################################################################################################
-# Parallel null model using a SOCK cluster archictecture
+# Parallel null model using a SOCK cluster archictecture 
 #########################################################################################################################################
 # Example used: functional diversity
 # For this example we will compute functional richness (FRic) and functional divergence (FDiv)
@@ -17,7 +17,7 @@
 # Laliberté, E. and P. Legendre (2010) A distance-based framework for measuring functional diversity for multiple traits.
 # Ecology, 91:299-305.
 
-
+#SOCK Cluster can be used on Linux, Windows or OX. However, this script was only tested on Windows and Linux. 
 #########################################################################################################################################
 
 # Data: (1) Community data: Fish communities from France's reservoirs [83 communities x 45 species]
