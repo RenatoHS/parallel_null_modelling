@@ -19,6 +19,22 @@
 
 #SOCK Cluster can be used on Linux, Windows or OX. However, this script was only tested on Windows and Linux. 
 #########################################################################################################################################
+#
+# Code written by Renato Henriques-Silva
+
+#  Copyright GPL-2 2012 Renato Henriques-Silva
+#  http://www.gnu.org/licenses/gpl-2.0.txt
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+############################################################################################################################################
 
 # Data: (1) Community data: Fish communities from France's reservoirs [83 communities x 45 species]
 #       (2) Trait data: morphological and ecological traits (45 species x 25 traits)
@@ -144,7 +160,7 @@ nt=nperm/nc
   res[,5]<-FD_ses[,2]
   res[,6]<-p[,2]
  
-  
+  res
   
   
   
