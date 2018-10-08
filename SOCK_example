@@ -17,22 +17,22 @@
 # Laliberté, E. and P. Legendre (2010) A distance-based framework for measuring functional diversity for multiple traits.
 # Ecology, 91:299-305.
 
-#SOCK Cluster can be used on Linux, Windows or OX. However, this script was only tested on Windows and Linux. 
+# SOCK Cluster can be used on Linux, Windows or OX. However, this script was only tested on Windows and Linux. 
 #########################################################################################################################################
 # Code written by Renato Henriques-Silva
 
-#  Copyright GPL-2 2012 Renato Henriques-Silva
-#  http://www.gnu.org/licenses/gpl-2.0.txt
+# Copyright GPL-2 2012 Renato Henriques-Silva
+# http://www.gnu.org/licenses/gpl-2.0.txt
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 ############################################################################################################################################
 
 # Data: (1) Community data: Fish communities from France's reservoirs [83 communities x 45 species]
@@ -46,7 +46,7 @@ require(ade4)
 # load data
 # community data
 urlfile_comm <- 'https://raw.githubusercontent.com/RenatoHS/parallel_null_modelling/master/lake_comm.txt'
-comm<-read.table(urlfile_comm, sep=";", head=TRUE)
+comm <- read.table(urlfile_comm, sep=";", head=TRUE)
 
 # trait data
 urlfile_traits <- 'https://raw.githubusercontent.com/RenatoHS/parallel_null_modelling/master/traits_fishlakes.txt'
@@ -102,10 +102,10 @@ nt <- nperm/nc
   null_model_FD_temp <- replicate(nt,matrix(0, ncol=2, nrow=nrow(comm),dimnames = list(NULL,c("FRic","FDiv"))),simplify=FALSE)
 
 # replicate "nt" times the commmunity matrix
-  rep.comm<-replicate(nt, comm, simplify=FALSE)
+  rep.comm <- replicate(nt, comm, simplify=FALSE)
   
-# randomize the "nt" community matrices, keeping richness equal to observed
-  rand.comm<-lapply(rep.comm, function(x) randomizeMatrix(x,null.model="richness",iterations=1000))
+# randomize all "nt" community matrices, keeping richness equal to observed (users may adapt the null model algorithm to its needs)
+  rand.comm <- lapply(rep.comm, function(x) randomizeMatrix(x, null.model="richness", iterations=1000))
  for (j in 1:nt){
         
         # Compute FRic, FDIv for each randomized community matrix 
@@ -129,7 +129,7 @@ nt <- nperm/nc
 
   
   # create a matrix to store p-values for each metric (FRic, FDiv)
-  p <- matrix(numeric(),ncol=2,nrow=nrow(comm))
+  p <- matrix(numeric(), ncol=2, nrow=nrow(comm))
  
   # for each lake "i"
   for (i in 1:nrow(comm)){
