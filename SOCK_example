@@ -45,11 +45,11 @@ require(ade4)
 
 # load data
 # community data
-urlfile_comm <- 'https://raw.githubusercontent.com/RenatoHS/parallel_null_modelling/master/lake_comm.txt'
+urlfile_comm <- 'https://raw.githubusercontent.com/RenatoHS/parallel_null_modelling/master/data/lake.comm.txt'
 comm <- read.table(urlfile_comm, sep=";", head=TRUE)
 
 # trait data
-urlfile_traits <- 'https://raw.githubusercontent.com/RenatoHS/parallel_null_modelling/master/traits_fishlakes.txt'
+urlfile_traits <- 'https://raw.githubusercontent.com/RenatoHS/parallel_null_modelling/master/data/lake.traitfish.txt'
 traits<-read.table(urlfile_traits, sep=";", head=TRUE)
 
 # traits have qualitate and quantitative data, plus some missing values. Transform the data using the Gower distance method
