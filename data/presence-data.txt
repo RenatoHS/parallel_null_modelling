@@ -1,0 +1,5 @@
+Thyroptera_tricolor	Mormoops_megalophylla	Pteronotus_parnelii	Diphylla_ecaudata	Desmodus_rotundus	Micronycteris_brachyotis	Micronycteris_megalotis	Trachops_cirrhosus	Chrotopterus_auritus	Tonatia_brasiliense	Tonatia_evotis	Mimon_cozumelae	Phyllostomus_stenops	Phyllostomus_discolor	Glossophaga_commissarisi	Glossophaga_soricina	Hylonycteris_underwoodi	Lichonycteris_obscura	Carollia_brevicauda	Carollia_perspicillata	Sturnira_lilium	Centurio_senex	Enchisthenes_hartii	Dermanura_phaeotis	Dermanura_watsoni	Artibeus_jamaicensis	Artibeus_lituratus	Chiroderma_villosum	Vampyressa_pusilla	Uroderma_bilobatum	Vampyrodes_major	Platyrrhinus_helleri	Bauerus_dubiaquercus	Myotis_keaysi
+F	1	0	20	1	4	1	0	2	5	1	0	2	3	2	15	20	0	0	72	49	56	1	1	6	17	73	76	0	1	7	1	6	1	0
+P	1	0	4	0	3	0	2	0	0	2	2	1	0	0	20	53	0	0	159	100	137	2	0	4	13	96	82	0	3	4	0	10	0	1
+O	0	1	4	1	0	0	1	0	0	0	0	4	0	5	33	70	0	0	250	92	102	0	0	5	12	35	51	1	0	2	0	17	2	2
+C	0	0	0	0	1	0	0	0	0	1	0	0	0	0	27	58	2	1	45	60	234	2	0	3	15	30	66	5	0	4	0	18	0	0
