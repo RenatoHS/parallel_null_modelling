@@ -81,11 +81,11 @@ cl <- parallel::makeCluster(nc)
 # register parallel backend 
 doParallel::registerDoParallel(cl)
  
- # define number of permutations for the null model
-nperm <- 1000
+ # define number of permutations for the null model 
+nperm <- 100
 
 # make sure that nperm/nc is a whole number so that all cores have the same number of permutations to work on
-# in this example, we use 1000 permutations divided by 4 cores, hence 250 permutation per core
+# in this example, we use 100 permutations divided by 4 cores, hence 25 permutation per core
 
 # export necessary variables and functions to the cluster of cores
 parallel::clusterExport(cl = cl, c("nperm", "comm", "traits","dbFD_modif"),envir=environment()) 
