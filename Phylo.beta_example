@@ -42,22 +42,18 @@ require(doParallel)
 
 # load data
 # community data
-urlfile_comm <- 'https://raw.githubusercontent.com/RenatoHS/parallel_null_modelling/master/data/presence-absence.data.txt'
-comm <- read.table(urlfile_comm, sep=";", head=TRUE)
+urlfile_comm <- 'https://raw.githubusercontent.com/RenatoHS/parallel_null_modelling/master/data/presence-data.txt'
+comm <- read.table(urlfile_comm, head=TRUE)
 
 # phylogenetic data
 urlfile_phylo <- 'https://raw.githubusercontent.com/RenatoHS/parallel_null_modelling/master/data/tree.txt'
 tree<-read.tree(urlfile_phylo)
 tree<-root(tree, 1, r=TRUE)
-
 # transform community data into presence-absence
 comm<-ifelse(comm>0, 1, 0)
 
 # compute observed phylogenetic indices
 obs.phy <- phylo.beta.pair(comm, tree, index.family="sorensen")
-
-# transform functional.beta.pair results into a matrix
-obs.phy <- do.call(rbind, lapply(obs.phy, function(x) c(x)))
 
 # number of possible pairs of sites
 pairs <- combn(nrow(comm),2)
@@ -70,6 +66,9 @@ for (i in 1:ncol(pairs)){
                    attr(obs.phy$phylo.beta.sim, "Labels")[pairs[2,i]], sep="-")
   pair_names<-c(pair_names, pair_id) 
 }
+
+# transform functional.beta.pair results into a matrix
+obs.phy <- do.call(rbind, lapply(obs.phy, function(x) c(x)))
 
 # set names for each pair of site using the set of strings created previsouly
 colnames(obs.phy) <- pair_names
@@ -135,7 +134,7 @@ ses.phy <- (obs.phy - mean.null.phy)/sd.null.phy
 
 #group all results
 res.phy <- as.data.frame(matrix(numeric(), ncol = 9, nrow = ncol(obs.phy),
-                            dimnames = list(pair_names, c("obs.SIM","ses.SIM","p.SIM","obs.SNE","ses.SNE","p.SNE","obs.SOR","ses.SOR","p.SOR"))))
+                                dimnames = list(pair_names, c("obs.SIM","ses.SIM","p.SIM","obs.SNE","ses.SNE","p.SNE","obs.SOR","ses.SOR","p.SOR"))))
 
 res.phy$obs.SIM <- obs.phy[1,]
 res.phy$obs.SNE <- obs.phy[2,]
@@ -150,5 +149,3 @@ res.phy$p.SNE <- p.phy[2,]
 res.phy$p.SOR <- p.phy[3,]
 
 res.phy
-
-
