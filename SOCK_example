@@ -39,7 +39,7 @@
 #       (2) Trait data: morphological and ecological traits (45 species x 25 traits)
 
 require(FD)
-require(doSNOW)
+require(doParallel)
 require(picante)
 require(ade4)
 
@@ -76,10 +76,10 @@ FD_obs <- as.data.frame(cbind(FRic = FD_results$FRic, FDiv = FD_results$FDiv))
 nc <- 4 
     
 # create cluster
-cl <- snow::makeCluster(nc, type = "SOCK")
+cl <- parallel::makeCluster(nc)
     
 # register parallel backend 
-doSNOW::registerDoSNOW(cl)
+doParallel::registerDoParallel(cl)
  
  # define number of permutations for the null model
 nperm <- 1000
@@ -88,7 +88,7 @@ nperm <- 1000
 # in this example, we use 1000 permutations divided by 4 cores, hence 250 permutation per core
 
 # export necessary variables and functions to the cluster of cores
-snow::clusterExport(cl = cl, c("nperm", "comm", "traits","dbFD_modif"),envir=environment()) 
+parallel::clusterExport(cl = cl, c("nperm", "comm", "traits","dbFD_modif"),envir=environment()) 
  
 # The ".combine" argument in the foreach loop specifiy how the user wants to combine the output of all cores together
 # Because the final output of our function is a list object, we use the argument ".combine=c"
@@ -121,7 +121,7 @@ nt <- nperm/nc
     }
 
   # close the cluster
-  stopCluster(cl)
+  parallel::stopCluster(cl)
  
   # create matrices to store mean and sd values of the metrics (FRic, FDiv) for each lake (mean/sd of the null values)
   FD_null_mean <- matrix(numeric(), ncol=2, nrow=nrow(comm), dimnames=list(row.names(comm), c("FRic","FDiv")))
