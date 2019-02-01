@@ -68,7 +68,7 @@ source("https://raw.githubusercontent.com/RenatoHS/parallel_null_modelling/maste
 FD_results <- dbFD(traits_pc, comm,  w.abun = FALSE, calc.FRic = TRUE, calc.FDiv = TRUE)
 
 # FD compute a bunch of different metrics, but we only are interested in FRic and FDiv)
-FD_obs <- as.data.frame(cbind(FRic = FD_results$FRic, FDiv = FD_results$FDiv)) 
+FD_obs <- data.frame(FRic = FD_results$FRic, FDiv = FD_results$FDiv) 
 
 # Now the null model
 
