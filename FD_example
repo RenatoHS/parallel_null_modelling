@@ -88,7 +88,7 @@ nperm <- 100
 # in this example, we use 100 permutations divided by 4 cores, hence 25 permutation per core
 
 # export necessary variables and functions to the cluster of cores
-parallel::clusterExport(cl = cl, c("nperm", "comm", "traits","dbFD_modif"),envir=environment()) 
+parallel::clusterExport(cl = cl, c("nperm", "comm", "traits_pc","dbFD_modif"),envir=environment()) 
  
 # The ".combine" argument in the foreach loop specifiy how the user wants to combine the output of all cores together
 # Because the final output of our function is a list object, we use the argument ".combine=c"
